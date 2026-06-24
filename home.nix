@@ -1,9 +1,11 @@
-{ config, pkgs, inputs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
-  imports = [
-    inputs.caelestia.homeModules.default
-  ];
 
   home.username = "soul";
   home.homeDirectory = "/home/soul";
@@ -32,13 +34,13 @@
     pkgs.wl-clipboard
     pkgs.cliphist
     pkgs.hyprpicker
-    pkgs.xfce.thunar
+    pkgs.thunar
 
     # Design System Fonts
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.noto-fonts
     pkgs.noto-fonts-cjk-sans
-    pkgs.noto-fonts-emoji
+    pkgs.noto-fonts-color-emoji
   ];
 
   programs.vscode = {
@@ -55,8 +57,8 @@
   };
 
   # Mandatory activation script hook for Caelestia daemon logic
-  home.activationScripts = {
-    caelestiaDaemonStart = config.lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation = {
+    caelestiaDaemonStart = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       # Triggers daemon safely if not already running under active generation
       $DRY_RUN_CMD caelestia shell -d >/dev/null || true
     '';
